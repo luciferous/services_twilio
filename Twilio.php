@@ -23,6 +23,9 @@ abstract class Resource implements DataProxy {
 }
 
 class ListResource extends Resource {
+	public function get($sid) {
+		return new InstanceResource($sid, substr($this->name, 0, -1), $this);
+	}
 }
 
 class InstanceResource extends Resource {
@@ -34,16 +37,22 @@ class InstanceResource extends Resource {
 		$this->object->sid = $sid;
     parent::__construct($name, $proxy);
   }
-  public function __set($key, $value) {
-    $this->object->$key = $value;
-    return parent::__set($key, $value);
-  }
   public function __get($key) {
     if (!isset($this->object->$key)) {
       $this->object = $this->proxy->receive($this->sid);
+			if (isset($this->object->subresource_uris)) {
+				foreach ($this->object->subresource_uris as $res => $uri) {
+					$type = basename($uri, '.' . pathinfo($uri, PATHINFO_EXTENSION));
+					$name = strtolower($type);
+					$this->$name = new ListResource($type, $this);
+				}
+			}
     }
-    return $this->object->$key;
+    return isset($this->$key) ? $this->$key : $this->object->$key;
   }
+	public function receive($path) {
+    return $this->proxy->receive("$this->sid/$path");
+	}
 }
 
 class TwilioClient extends Resource {
@@ -67,7 +76,9 @@ class TwilioClient extends Resource {
       $this->http->get("/$this->version/$path.json");
     if (200 <= $status && $status < 300) {
       if ($headers['Content-Type'] == 'application/json') {
-        return json_decode($body);
+        $object = json_decode($body);
+				var_export($object);
+				return $object;
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
   }

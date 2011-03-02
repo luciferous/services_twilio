@@ -36,4 +36,56 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
 		$client = new TwilioClient('AC123', '123', '2010-04-01', $http);
 		$client->account->sid;
 	}
+
+	function testObjectLoadsOnlyOnce() {
+    $account = (object) array(
+      'sid' => 'AC123',
+      'friendly_name' => 'Robert Paulson',
+			'status' => 'active',
+    );
+		$http = m::mock();
+    $http->shouldReceive('get')
+      ->once()
+      ->with('/2010-04-01/Accounts/AC123.json')
+      ->andReturn(array(
+        200,
+        array('Content-Type' => 'application/json'),
+        json_encode($account)
+      ));
+		$client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+		$client->account->friendly_name;
+		$client->account->friendly_name;
+		$client->account->status;
+	}
+
+	function testSubresourceLoad() {
+		$acct = new stdClass;
+		$call = new stdClass;
+		$acct->subresource_uris->calls = '/2010-04-01/Accounts/AC123/Calls.json';
+		$call->sid = 'CA123';
+		$call->status = 'Completed';
+
+		$http = m::mock();
+    $http->shouldReceive('get')
+      ->once()
+      ->with('/2010-04-01/Accounts/AC123.json')
+      ->andReturn(array(
+        200,
+        array('Content-Type' => 'application/json'),
+        json_encode($acct)
+      ));
+    $http->shouldReceive('get')
+      ->once()
+      ->with('/2010-04-01/Accounts/AC123/Calls/CA123.json')
+      ->andReturn(array(
+        200,
+        array('Content-Type' => 'application/json'),
+        json_encode($call)
+      ));
+
+		$client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+		$this->assertEquals('Completed', $client->account->calls->get('CA123')->status);
+	}
+
+	//function testAccessingNonExistentPropertiesErrorsOut
 }
