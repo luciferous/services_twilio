@@ -48,7 +48,13 @@ class InstanceResource extends Resource {
 				}
 			}
     }
-    return isset($this->$key) ? $this->$key : $this->object->$key;
+		return isset($this->$key)
+			? $this->$key
+			: (
+				isset($this->object->$key)
+				? $this->object->$key
+				: NULL
+			);
   }
 	public function receive($path) {
     return $this->proxy->receive("$this->sid/$path");
@@ -77,7 +83,7 @@ class TwilioClient extends Resource {
     if (200 <= $status && $status < 300) {
       if ($headers['Content-Type'] == 'application/json') {
         $object = json_decode($body);
-				var_export($object);
+				//var_export($object);
 				return $object;
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
