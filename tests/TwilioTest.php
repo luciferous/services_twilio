@@ -126,5 +126,33 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
 			$client->account->calls->get('CA123')->notifications->get('NO123')->message_text);
 	}
 
+	function testListResource() {
+		$acct = new stdClass;
+		$acct->subresource_uris->calls = '/2010-04-01/Accounts/AC123/Calls.json';
+		$page = new stdClass;
+		$page->calls = array((object) array('status' => 'Completed'));
+
+		$http = m::mock();
+    $http->shouldReceive('get')
+      ->once()
+      ->with('/2010-04-01/Accounts/AC123.json')
+      ->andReturn(array(
+        200,
+        array('Content-Type' => 'application/json'),
+        json_encode($acct)
+      ));
+    $http->shouldReceive('get')
+      ->once()
+      ->with('/2010-04-01/Accounts/AC123/Calls.json')
+      ->andReturn(array(
+        200,
+        array('Content-Type' => 'application/json'),
+        json_encode($page)
+      ));
+		$client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+		$call = current($client->account->calls->items());
+		$this->assertEquals('Completed', $call->status);
+	}
+
 	//function testAccessingNonExistentPropertiesErrorsOut
 }

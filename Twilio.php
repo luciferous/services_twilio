@@ -26,6 +26,12 @@ class ListResource extends Resource {
 	public function get($sid) {
 		return new InstanceResource($sid, substr($this->name, 0, -1), $this);
 	}
+
+	public function items() {
+		$page = $this->proxy->receive($this->name);
+		$name = strtolower($this->name);
+		return $page->$name;
+	}
 }
 
 class InstanceResource extends Resource {
@@ -37,6 +43,9 @@ class InstanceResource extends Resource {
 		$this->object->sid = $sid;
     parent::__construct($name, $proxy);
   }
+	public function setObject($object) {
+		$this->object = $object;
+	}
   public function __get($key) {
     if (!isset($this->object->$key)) {
       $this->object = $this->proxy->receive($this->sid);
