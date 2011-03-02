@@ -29,4 +29,11 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('AC123', $client->account->sid);
     $this->assertEquals('Robert Paulson', $client->account->friendly_name);
   }
+
+	function testAccessSidAvoidsNetworkCall() {
+		$http = m::mock();
+		$http->shouldReceive('get')->never();
+		$client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+		$client->account->sid;
+	}
 }

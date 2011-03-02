@@ -31,6 +31,7 @@ class InstanceResource extends Resource {
   public function __construct($sid, $name, DataProxy $proxy) {
     $this->sid = $sid;
     $this->object = new stdClass;
+		$this->object->sid = $sid;
     parent::__construct($name, $proxy);
   }
   public function __set($key, $value) {
