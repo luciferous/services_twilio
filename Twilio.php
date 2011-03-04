@@ -20,17 +20,40 @@ abstract class Resource implements DataProxy {
   public function send($key, $value) {
     throw new ErrorException('not implemented');
   }
+  public static function decamelize($word) {
+    return preg_replace(
+      '/(^|[a-z])([A-Z])/e',
+      'strtolower(strlen("\\1") ? "\\1_\\2" : "\\2")',
+      $word
+    );
+  }
+  public static function camelize($word) {
+    return preg_replace('/(^|_)([a-z])/e', 'strtoupper("\\2")', $word);
+  }
 }
 
 class ListResource extends Resource {
   public function get($sid) {
-    return new InstanceResource($sid, substr($this->name, 0, -1), $this);
+    return new InstanceResource($sid, $this->getInstanceName(), $this);
   }
 
   public function items() {
     $page = $this->proxy->receive($this->name);
-    $name = strtolower($this->name);
+    $schema = $this->getSchema();
+    $name = $schema['list'];
     return $page->$name;
+  }
+
+  public function getInstanceName() {
+    return substr($this->name, 0, -1);
+  }
+
+  public function getSchema() {
+    return array(
+      'name' => $this->name,
+      'basename' => $this->name,
+      'list' => self::decamelize($this->name),
+    );
   }
 }
 
@@ -48,14 +71,7 @@ class InstanceResource extends Resource {
   }
   public function __get($key) {
     if (!isset($this->object->$key)) {
-      $this->object = $this->proxy->receive($this->sid);
-      if (isset($this->object->subresource_uris)) {
-        foreach ($this->object->subresource_uris as $res => $uri) {
-          $type = basename($uri, '.' . pathinfo($uri, PATHINFO_EXTENSION));
-          $name = strtolower($type);
-          $this->$name = new ListResource($type, $this);
-        }
-      }
+      $this->load($key);
     }
     return isset($this->$key)
       ? $this->$key
@@ -67,6 +83,16 @@ class InstanceResource extends Resource {
   }
   public function receive($path) {
     return $this->proxy->receive("$this->sid/$path");
+  }
+  private function load($key) {
+    $this->object = $this->proxy->receive($this->sid);
+    if (empty($this->object->subresource_uris)) return;
+    foreach ($this->object->subresource_uris as $res => $uri) {
+      $type = self::camelize($res);
+      $this->$res = class_exists($type)
+        ? new $type($this)
+        : new ListResource($type, $this);
+    }
   }
 }
 
@@ -96,5 +122,24 @@ class TwilioClient extends Resource {
         return $object;
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
+  }
+}
+
+class SmsMessages extends ListResource {
+  public function __construct(DataProxy $proxy) {
+    parent::__construct('SMS/Messages', $proxy);
+  }
+  public function getSchema() {
+    return array(
+      'class' => 'SmsMessages',
+      'basename' => 'SMS/Messages',
+      'list' => 'sms_messages',
+    );
+  }
+}
+
+class SmsMessage extends InstanceResource {
+  public function __construct($sid, SmsMessages $list) {
+    parent::__construct($sid, 'Sms/Message', $list);
   }
 }
