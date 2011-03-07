@@ -3,8 +3,8 @@
 require_once dirname(__FILE__) . '/' . 'tiny_http.php';
 
 interface DataProxy {
-  function receive($key);
   function send($key, $value);
+  function receive($key, array $params = array());
 }
 
 abstract class Resource implements DataProxy {
@@ -14,8 +14,8 @@ abstract class Resource implements DataProxy {
     $this->name = $name;
     $this->proxy = $proxy;
   }
-  public function receive($sid) {
-    return $this->proxy->receive("$this->name/$sid");
+  public function receive($sid, array $params = array()) {
+    return $this->proxy->receive("$this->name/$sid", $params);
   }
   public function send($key, $value) {
     throw new ErrorException('not implemented');
@@ -37,8 +37,8 @@ class ListResource extends Resource {
     return new InstanceResource($sid, $this->getInstanceName(), $this);
   }
 
-  public function items() {
-    $page = $this->proxy->receive($this->name);
+  public function getList(array $params = array()) {
+    $page = $this->proxy->receive($this->name, $params);
     $schema = $this->getSchema();
     $name = $schema['list'];
     return $page->$name;
@@ -81,8 +81,8 @@ class InstanceResource extends Resource {
         : NULL
       );
   }
-  public function receive($path) {
-    return $this->proxy->receive("$this->sid/$path");
+  public function receive($path, array $params = array()) {
+    return $this->proxy->receive("$this->sid/$path", $params);
   }
   private function load($key) {
     $this->object = $this->proxy->receive($this->sid);
@@ -112,9 +112,11 @@ class TwilioClient extends Resource {
     $this->accounts = new ListResource('Accounts', $this);
     $this->account = new InstanceResource($sid, 'Account', $this->accounts);
   }
-  public function receive($path) {
-    list($status, $headers, $body) =
-      $this->http->get("/$this->version/$path.json");
+  public function receive($path, array $params = array()) {
+    list($status, $headers, $body) = empty($params)
+      ? $this->http->get("/$this->version/$path.json")
+      : $this->http->get("/$this->version/$path.json?"
+        . http_build_query($params, '', '&'));
     if (200 <= $status && $status < 300) {
       if ($headers['Content-Type'] == 'application/json') {
         $object = json_decode($body);

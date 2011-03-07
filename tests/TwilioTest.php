@@ -150,7 +150,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         json_encode($page)
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
-    $call = current($client->account->calls->items());
+    $call = current($client->account->calls->getList());
     $this->assertEquals('Completed', $call->status);
   }
 
@@ -177,8 +177,24 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         json_encode($page)
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
-    $sms = current($client->account->sms_messages->items());
+    $sms = current($client->account->sms_messages->getList());
     $this->assertEquals('sent', $sms->status);
+  }
+
+  function testParams() {
+    $http = m::mock();
+    $http->shouldReceive('get')
+      ->with('/2010-04-01/Accounts.json?FriendlyName=foo&Status=active')
+      ->andReturn(array(
+        200,
+        array('Content-Type' => 'application/json'),
+        '{"accounts":[]}'
+      ));
+    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client->accounts->getList(array(
+      'FriendlyName' => 'foo',
+      'Status' => 'active',
+    ));
   }
 
   //function testAccessingNonExistentPropertiesErrorsOut
