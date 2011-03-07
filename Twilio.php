@@ -171,7 +171,7 @@ class Calls extends ListResource {
   public function __construct(DataProxy $proxy) {
     parent::__construct('Calls', $proxy);
   }
-  public function create($from, $to, $url, array $params = array()) {
+  public function createCall($from, $to, $url, array $params = array()) {
     return parent::create(array(
       'From' => $from,
       'To' => $to,
@@ -207,3 +207,5 @@ class SmsMessage extends InstanceResource {
     parent::__construct($sid, 'Sms/Message', $list);
   }
 }
+
+// vim: ai ts=2 sw=2 noet sta
