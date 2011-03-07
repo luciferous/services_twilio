@@ -8,7 +8,6 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
   function tearDown() {
     m::close();
   }
-
   function testNeedsRefining() {
     $http = m::mock();
     $http->shouldReceive('get')->once()

@@ -8,17 +8,11 @@ interface DataProxy {
 }
 
 abstract class Resource implements DataProxy {
-  protected $proxy;
   protected $name;
-  public function __construct($name, DataProxy $proxy) {
-    $this->name = $name;
+  protected $proxy;
+  public function __construct(DataProxy $proxy) {
     $this->proxy = $proxy;
-  }
-  public function receive($sid, array $params = array()) {
-    return $this->proxy->receive("$this->name/$sid", $params);
-  }
-  public function send($sid, array $params = array()) {
-    return $this->proxy->send("$this->name/$sid", $params);
+    $this->name = get_class($this);
   }
   public static function decamelize($word) {
     return preg_replace(
@@ -32,12 +26,10 @@ abstract class Resource implements DataProxy {
   }
 }
 
-class ListResource extends Resource {
+abstract class ListResource extends Resource {
   public function get($sid) {
     $type = $this->getInstanceName();
-    return class_exists($type)
-      ? new $type($sid, $this)
-      : new InstanceResource($sid, $this->getInstanceName(), $this);
+    return new $type($sid, $this);
   }
 
   public function _create(array $params) {
@@ -47,9 +39,22 @@ class ListResource extends Resource {
     return $inst;
   }
 
-  public function getList(array $params = array()) {
-    $page = $this->proxy->receive($this->name, $params);
+  public function receive($sid, array $params = array()) {
     $schema = $this->getSchema();
+    $basename = $schema['basename'];
+    return $this->proxy->receive("$basename/$sid", $params);
+  }
+
+  public function send($sid, array $params = array()) {
+    $schema = $this->getSchema();
+    $basename = $schema['basename'];
+    return $this->proxy->send("$basename/$sid", $params);
+  }
+
+  public function getList(array $params = array()) {
+    $schema = $this->getSchema();
+    $basename = $schema['basename'];
+    $page = $this->proxy->receive($basename, $params);
     $name = $schema['list'];
     return $page->$name;
   }
@@ -59,10 +64,12 @@ class ListResource extends Resource {
   }
 
   public function getSchema() {
+    $name = get_class($this);
     return array(
-      'name' => $this->name,
-      'basename' => $this->name,
-      'list' => self::decamelize($this->name),
+      'name' => $name,
+      'basename' => $name,
+      'instance' => substr($name, 0, -1),
+      'list' => self::decamelize($name),
     );
   }
 }
@@ -70,11 +77,11 @@ class ListResource extends Resource {
 class InstanceResource extends Resource {
   protected $sid;
   protected $object;
-  public function __construct($sid, $name, DataProxy $proxy) {
+  public function __construct($sid, DataProxy $proxy) {
     $this->sid = $sid;
     $this->object = new stdClass;
     $this->object->sid = $sid;
-    parent::__construct($name, $proxy);
+    parent::__construct($proxy);
   }
   public function update($params, $value = NULL) {
     if (!is_array($params)) {
@@ -128,8 +135,8 @@ class TwilioClient extends Resource {
     $this->http = (NULL === $_http)
       ? new TinyHttp("https://$sid:$token@api.twilio.com", array('debug' => TRUE))
       : $_http;
-    $this->accounts = new ListResource('Accounts', $this);
-    $this->account = new InstanceResource($sid, 'Account', $this->accounts);
+    $this->accounts = new Accounts($this);
+    $this->account = $this->accounts->get($sid);
   }
   public function receive($path, array $params = array()) {
     list($status, $headers, $body) = empty($params)
@@ -163,10 +170,10 @@ class TwilioClient extends Resource {
   }
 }
 
+class Accounts extends ListResource { }
+class Account extends InstanceResource { }
+
 class Calls extends ListResource {
-  public function __construct(DataProxy $proxy) {
-    parent::__construct('Calls', $proxy);
-  }
   public function create($from, $to, $url, array $params = array()) {
     return parent::_create(array(
       'From' => $from,
@@ -177,18 +184,12 @@ class Calls extends ListResource {
 }
 
 class Call extends InstanceResource {
-  public function __construct($sid, Calls $list) {
-    parent::__construct($sid, 'Call', $list);
-  }
   public function hangup() {
     $this->update('Status', 'completed');
   }
 }
 
 class SmsMessages extends ListResource {
-  public function __construct(DataProxy $proxy) {
-    parent::__construct('SMS/Messages', $proxy);
-  }
   public function getSchema() {
     return array(
       'class' => 'SmsMessages',
@@ -199,9 +200,25 @@ class SmsMessages extends ListResource {
 }
 
 class SmsMessage extends InstanceResource {
-  public function __construct($sid, SmsMessages $list) {
-    parent::__construct($sid, 'Sms/Message', $list);
-  }
+}
+
+class AvailablePhoneNumbers extends ListResource {
+}
+class OutgoingCallerIds extends ListResource {
+}
+class IncomingPhoneNumbers extends ListResource {
+}
+class Conferences extends ListResource {
+}
+class Participants extends ListResource {
+}
+class Recordings extends ListResource {
+}
+class Transcriptions extends ListResource {
+}
+class Notifications extends ListResource {
+}
+class Notification extends InstanceResource {
 }
 
 // vim: ai ts=2 sw=2 noet sta
