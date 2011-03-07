@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/' . 'tiny_http.php';
+require_once dirname(__FILE__) . '/' . 'TinyHttp.php';
 
 interface DataProxy {
   function receive($key, array $params = array());
@@ -40,7 +40,7 @@ class ListResource extends Resource {
       : new InstanceResource($sid, $this->getInstanceName(), $this);
   }
 
-  public function create(array $params) {
+  public function _create(array $params) {
     $obj = $this->proxy->send($this->name, $params);
     $inst = $this->get($obj->sid);
     $inst->setObject($obj);
@@ -168,7 +168,7 @@ class Calls extends ListResource {
     parent::__construct('Calls', $proxy);
   }
   public function create($from, $to, $url, array $params = array()) {
-    return parent::create(array(
+    return parent::_create(array(
       'From' => $from,
       'To' => $to,
       'Url' => $url,

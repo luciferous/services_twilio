@@ -1,9 +1,8 @@
 <?php
 
 use \Mockery as m;
-require_once 'Mockery/Loader.php';
-$loader = new m\Loader;
-$loader->register();
+
+require_once 'Services/Twilio.php';
 
 class TwilioTest extends PHPUnit_Framework_TestCase {
   function tearDown() {
@@ -177,7 +176,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         '{"sid":"CA123"}'
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
-    $client->account->calls->createCall('123', '123', 'http://example.com');
+    $client->account->calls->create('123', '123', 'http://example.com');
   }
 
   function testModifyLiveCall() {
@@ -203,7 +202,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
     $calls = $client->account->calls;
-    $calls->createCall('123', '123', 'http://example.com')->hangup();
+    $calls->create('123', '123', 'http://example.com')->hangup();
   }
 
   //function testAccessingNonExistentPropertiesErrorsOut

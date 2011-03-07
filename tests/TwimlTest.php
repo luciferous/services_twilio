@@ -1,9 +1,8 @@
 <?php
 
 use \Mockery as m;
-require_once 'Mockery/Loader.php';
-$loader = new m\Loader;
-$loader->register();
+
+require_once 'Services/Twiml.php';
 
 class TwimlTest extends PHPUnit_Framework_TestCase {
   function tearDown() {
