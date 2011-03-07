@@ -1,144 +1,14 @@
 <?php
 
 require_once dirname(__FILE__) . '/' . 'TinyHttp.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/Page.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/DataProxy.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/Resource.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/ListResource.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/InstanceResource.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/Resources.php';
 
-interface DataProxy {
-  function receive($key, array $params = array());
-  function send($key, array $params = array());
-}
-
-abstract class Resource implements DataProxy {
-  protected $name;
-  protected $proxy;
-  public function __construct(DataProxy $proxy) {
-    $this->proxy = $proxy;
-    $this->name = get_class($this);
-  }
-  public static function decamelize($word) {
-    return preg_replace(
-      '/(^|[a-z])([A-Z])/e',
-      'strtolower(strlen("\\1") ? "\\1_\\2" : "\\2")',
-      $word
-    );
-  }
-  public static function camelize($word) {
-    return preg_replace('/(^|_)([a-z])/e', 'strtoupper("\\2")', $word);
-  }
-}
-
-abstract class ListResource extends Resource {
-  public function get($sid) {
-    $type = $this->getInstanceName();
-    return new $type($sid, $this);
-  }
-
-  public function _create(array $params) {
-    $obj = $this->proxy->send($this->name, $params);
-    $inst = $this->get($obj->sid);
-    $inst->setObject($obj);
-    return $inst;
-  }
-
-  public function receive($sid, array $params = array()) {
-    $schema = $this->getSchema();
-    $basename = $schema['basename'];
-    return $this->proxy->receive("$basename/$sid", $params);
-  }
-
-  public function send($sid, array $params = array()) {
-    $schema = $this->getSchema();
-    $basename = $schema['basename'];
-    return $this->proxy->send("$basename/$sid", $params);
-  }
-
-  public function getPage($page = 0, $size = 10, array $filters = array()) {
-    $schema = $this->getSchema();
-    $page = $this->proxy->receive($schema['basename'], array(
-      'Page' => $page,
-      'PageSize' => $size,
-    ) + $filters);
-    return new Page($page, $schema['list']);
-  }
-
-  public function getInstanceName() {
-    return substr($this->name, 0, -1);
-  }
-
-  public function getSchema() {
-    $name = get_class($this);
-    return array(
-      'name' => $name,
-      'basename' => $name,
-      'instance' => substr($name, 0, -1),
-      'list' => self::decamelize($name),
-    );
-  }
-}
-
-class Page {
-  protected $page;
-  protected $items;
-  public function __construct($page, $name) {
-    $this->page = $page;
-    $this->items = $page->{$name};
-  }
-  public function getItems() {
-    return $this->items;
-  }
-  public function __get($prop) {
-    return $this->page->$prop;
-  }
-}
-
-abstract class InstanceResource extends Resource {
-  protected $sid;
-  protected $object;
-  public function __construct($sid, DataProxy $proxy) {
-    $this->sid = $sid;
-    $this->object = new stdClass;
-    $this->object->sid = $sid;
-    parent::__construct($proxy);
-  }
-  public function update($params, $value = NULL) {
-    if (!is_array($params)) {
-      $params = array($params => $value);
-    }
-    $this->proxy->send("$this->sid", $params);
-  }
-  public function setObject($object) {
-    $this->load($object);
-  }
-  public function __get($key) {
-    if (!isset($this->object->$key)) {
-      $this->load();
-    }
-    return isset($this->$key)
-      ? $this->$key
-      : (
-        isset($this->object->$key)
-        ? $this->object->$key
-        : NULL
-      );
-  }
-  public function receive($path, array $params = array()) {
-    return $this->proxy->receive("$this->sid/$path", $params);
-  }
-  public function send($path, array $params = array()) {
-    return $this->proxy->send("$this->sid/$path", $params);
-  }
-  private function load($object = NULL) {
-    $this->object = $object ? $object : $this->proxy->receive($this->sid);
-    if (empty($this->object->subresource_uris)) return;
-    foreach ($this->object->subresource_uris as $res => $uri) {
-      $type = self::camelize($res);
-      $this->$res = class_exists($type)
-        ? new $type($this)
-        : new ListResource($type, $this);
-    }
-  }
-}
-
-class TwilioClient extends Resource {
+class Services_Twilio extends Services_Twilio_Resource {
   protected $http;
   protected $version;
   public function __construct(
@@ -184,57 +54,6 @@ class TwilioClient extends Resource {
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
   }
-}
-
-class Accounts extends ListResource { }
-class Account extends InstanceResource { }
-
-class Calls extends ListResource {
-  public function create($from, $to, $url, array $params = array()) {
-    return parent::_create(array(
-      'From' => $from,
-      'To' => $to,
-      'Url' => $url,
-    ) + $params);
-  }
-}
-
-class Call extends InstanceResource {
-  public function hangup() {
-    $this->update('Status', 'completed');
-  }
-}
-
-class SmsMessages extends ListResource {
-  public function getSchema() {
-    return array(
-      'class' => 'SmsMessages',
-      'basename' => 'SMS/Messages',
-      'list' => 'sms_messages',
-    );
-  }
-}
-
-class SmsMessage extends InstanceResource {
-}
-
-class AvailablePhoneNumbers extends ListResource {
-}
-class OutgoingCallerIds extends ListResource {
-}
-class IncomingPhoneNumbers extends ListResource {
-}
-class Conferences extends ListResource {
-}
-class Participants extends ListResource {
-}
-class Recordings extends ListResource {
-}
-class Transcriptions extends ListResource {
-}
-class Notifications extends ListResource {
-}
-class Notification extends InstanceResource {
 }
 
 // vim: ai ts=2 sw=2 noet sta

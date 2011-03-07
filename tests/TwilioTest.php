@@ -18,7 +18,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
           'friendly_name' => 'Robert Paulson',
         ))
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $this->assertEquals('AC123', $client->account->sid);
     $this->assertEquals('Robert Paulson', $client->account->friendly_name);
   }
@@ -26,7 +26,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
   function testAccessSidAvoidsNetworkCall() {
     $http = m::mock();
     $http->shouldReceive('get')->never();
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $client->account->sid;
   }
 
@@ -41,7 +41,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
           'status' => 'active',
         ))
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $client->account->friendly_name;
     $client->account->friendly_name;
     $client->account->status;
@@ -64,7 +64,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         json_encode(array('status' => 'Completed'))
       ));
 
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $this->assertEquals(
       'Completed',
       $client->account->calls->get('CA123')->status
@@ -98,7 +98,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         json_encode(array('message_text' => 'Foo'))
       ));
 
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $notifs = $client->account->calls->get('CA123')->notifications;
     $this->assertEquals('Foo', $notifs->get('NO123')->message_text);
   }
@@ -118,10 +118,10 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
       ->andReturn(array(200, array('Content-Type' => 'application/json'),
         json_encode(array(
           'total' => 1,
-          'calls' => array(array('status' => 'Completed'))
+          'calls' => array(array('status' => 'Completed', 'sid' => 'CA123'))
         ))
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $page = $client->account->calls->getPage(0, 10);
     $call = current($page->getItems());
     $this->assertEquals('Completed', $call->status);
@@ -141,9 +141,11 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
     $http->shouldReceive('get')->once()
       ->with('/2010-04-01/Accounts/AC123/SMS/Messages.json?Page=0&PageSize=10')
       ->andReturn(array(200, array('Content-Type' => 'application/json'),
-        json_encode(array('sms_messages' => array(array('status' => 'sent'))))
+        json_encode(array('sms_messages' => array(
+          array('status' => 'sent', 'sid' => 'SM123')
+        )))
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $sms = current($client->account->sms_messages->getPage()->getItems());
     $this->assertEquals('sent', $sms->status);
   }
@@ -158,7 +160,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         array('Content-Type' => 'application/json'),
         '{"accounts":[]}'
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $client->accounts->getPage(0, 10, array(
       'FriendlyName' => 'foo',
       'Status' => 'active',
@@ -180,7 +182,7 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
       ->andReturn(array(200, array('Content-Type' => 'application/json'),
         '{"sid":"CA123"}'
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $client->account->calls->create('123', '123', 'http://example.com');
   }
 
@@ -205,9 +207,52 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
       ->andReturn(array(200, array('Content-Type' => 'application/json'),
         '{"sid":"CA123"}'
       ));
-    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
     $calls = $client->account->calls;
     $calls->create('123', '123', 'http://example.com')->hangup();
+  }
+
+  function testUnmute() {
+    $http = m::mock();
+    $http->shouldReceive('get')->once()
+      ->with('/2010-04-01/Accounts/AC123.json')
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        json_encode(array(
+          'subresource_uris' =>
+          array('conferences' => '/2010-04-01/Accounts/AC123/Conferences.json')
+        ))
+      ));
+    $http->shouldReceive('get')->once()
+      ->with('/2010-04-01/Accounts/AC123/Conferences/CF123.json')
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        json_encode(array(
+          'subresource_uris' =>
+          array('participants' =>
+          '/2010-04-01/Accounts/AC123/Conferences/CF123/Participants.json')
+        ))
+      ));
+    $http->shouldReceive('get')->once()
+      ->with(
+'/2010-04-01/Accounts/AC123/Conferences/CF123/Participants.json?Page=0&PageSize=10')
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        json_encode(array(
+          'participants' => array(array('sid' => 'CA123'))
+        ))
+      ));
+    $http->shouldReceive('post')->once()
+      ->with(
+        '/2010-04-01/Accounts/AC123/Conferences/CF123/Participants/CA123.json',
+        m::any(),
+        'Muted=true'
+      )->andReturn(array(200, array('Content-Type' => 'application/json'),
+        json_encode('{}')
+      ));
+    $client = new Services_Twilio('AC123', '123', '2010-04-01', $http);
+    $conf = $client->account->conferences->get('CF123');
+    $page = $conf->participants->getPage();
+    foreach ($page->getItems() as $participant) {
+      $participant->mute();
+    }
   }
 
   //function testAccessingNonExistentPropertiesErrorsOut
