@@ -114,13 +114,18 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         ))
       ));
     $http->shouldReceive('get')->once()
-      ->with('/2010-04-01/Accounts/AC123/Calls.json')
+      ->with('/2010-04-01/Accounts/AC123/Calls.json?Page=0&PageSize=10')
       ->andReturn(array(200, array('Content-Type' => 'application/json'),
-        json_encode(array('calls' => array(array('status' => 'Completed'))))
+        json_encode(array(
+          'total' => 1,
+          'calls' => array(array('status' => 'Completed'))
+        ))
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
-    $call = current($client->account->calls->getList());
+    $page = $client->account->calls->getPage(0, 10);
+    $call = current($page->getItems());
     $this->assertEquals('Completed', $call->status);
+    $this->assertEquals(1, $page->total);
   }
 
   function testAsymmetricallyNamedResources() {
@@ -134,26 +139,27 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
         ))
       ));
     $http->shouldReceive('get')->once()
-      ->with('/2010-04-01/Accounts/AC123/SMS/Messages.json')
+      ->with('/2010-04-01/Accounts/AC123/SMS/Messages.json?Page=0&PageSize=10')
       ->andReturn(array(200, array('Content-Type' => 'application/json'),
         json_encode(array('sms_messages' => array(array('status' => 'sent'))))
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
-    $sms = current($client->account->sms_messages->getList());
+    $sms = current($client->account->sms_messages->getPage()->getItems());
     $this->assertEquals('sent', $sms->status);
   }
 
   function testParams() {
     $http = m::mock();
+    $qs = 'Page=0&PageSize=10&FriendlyName=foo&Status=active';
     $http->shouldReceive('get')
-      ->with('/2010-04-01/Accounts.json?FriendlyName=foo&Status=active')
+      ->with('/2010-04-01/Accounts.json?' . $qs)
       ->andReturn(array(
         200,
         array('Content-Type' => 'application/json'),
         '{"accounts":[]}'
       ));
     $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
-    $client->accounts->getList(array(
+    $client->accounts->getPage(0, 10, array(
       'FriendlyName' => 'foo',
       'Status' => 'active',
     ));

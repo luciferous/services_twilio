@@ -51,12 +51,13 @@ abstract class ListResource extends Resource {
     return $this->proxy->send("$basename/$sid", $params);
   }
 
-  public function getList(array $params = array()) {
+  public function getPage($page = 0, $size = 10, array $filters = array()) {
     $schema = $this->getSchema();
-    $basename = $schema['basename'];
-    $page = $this->proxy->receive($basename, $params);
-    $name = $schema['list'];
-    return $page->$name;
+    $page = $this->proxy->receive($schema['basename'], array(
+      'Page' => $page,
+      'PageSize' => $size,
+    ) + $filters);
+    return new Page($page, $schema['list']);
   }
 
   public function getInstanceName() {
@@ -74,7 +75,22 @@ abstract class ListResource extends Resource {
   }
 }
 
-class InstanceResource extends Resource {
+class Page {
+  protected $page;
+  protected $items;
+  public function __construct($page, $name) {
+    $this->page = $page;
+    $this->items = $page->{$name};
+  }
+  public function getItems() {
+    return $this->items;
+  }
+  public function __get($prop) {
+    return $this->page->$prop;
+  }
+}
+
+abstract class InstanceResource extends Resource {
   protected $sid;
   protected $object;
   public function __construct($sid, DataProxy $proxy) {
