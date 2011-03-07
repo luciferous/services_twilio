@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/' . 'TinyHttp.php';
+require_once dirname(__FILE__) . '/' . 'Twilio/TinyHttp.php';
 require_once dirname(__FILE__) . '/' . 'Twilio/Page.php';
 require_once dirname(__FILE__) . '/' . 'Twilio/DataProxy.php';
 require_once dirname(__FILE__) . '/' . 'Twilio/Resource.php';
@@ -19,7 +19,8 @@ class Services_Twilio extends Services_Twilio_Resource {
   ) {
     $this->version = $version;
     $this->http = (NULL === $_http)
-      ? new TinyHttp("https://$sid:$token@api.twilio.com", array('debug' => TRUE))
+      ? new Services_Twilio_TinyHttp(
+        "https://$sid:$token@api.twilio.com", array('debug' => TRUE))
       : $_http;
     $this->accounts = new Accounts($this);
     $this->account = $this->accounts->get($sid);
@@ -55,5 +56,4 @@ class Services_Twilio extends Services_Twilio_Resource {
     } else throw new ErrorException("$status: $body");
   }
 }
-
 // vim: ai ts=2 sw=2 noet sta

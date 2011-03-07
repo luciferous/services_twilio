@@ -1,9 +1,12 @@
 <?php
 /**
- * Twiml response XML generator.
+ * Twiml response generator from https://gist.github.com/855985.
+ * BSD License.
  */
-class TwimlException extends Exception {}
-class Twiml {
+
+class Services_Twilio_TwimlException extends Exception {}
+
+class Services_Twilio_Twiml {
 
   protected $element;
 

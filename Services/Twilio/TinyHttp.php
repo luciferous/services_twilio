@@ -1,22 +1,12 @@
 <?php
 /**
- * Copyright 2010 Neuman Vong. All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- *   1. Redistributions of source code must retain the above copyright notice,
- *   this list of conditions and the following disclaimer.
- *
- *   2. Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
+ * TinyHttp from https://gist.github.com/618157.
+ * BSD License.
  */
 
-class TinyHttpException extends ErrorException {}
+class Services_Twilio_TinyHttpException extends ErrorException {}
 
-class TinyHttp {
+class Services_Twilio_TinyHttp {
   var $user, $pass, $scheme, $host, $port, $debug;
   public function __construct($url, $kwargs = array()) {
     $parts = parse_url($url);
@@ -99,3 +89,4 @@ class TinyHttp {
     }
   }
 }
+

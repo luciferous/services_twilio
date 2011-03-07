@@ -2,7 +2,7 @@
 
 use \Mockery as m;
 
-require_once 'Services/Twiml.php';
+require_once 'Services/Twilio/Twiml.php';
 
 class TwimlTest extends PHPUnit_Framework_TestCase {
   function tearDown() {
@@ -10,7 +10,7 @@ class TwimlTest extends PHPUnit_Framework_TestCase {
   }
 
   function testStuff() {
-    $r = new Twiml();
+    $r = new Services_Twilio_Twiml();
     $r->say('hello');
     $r->dial()->number('123', array('sendDigits' => '456'));
     $r->gather(array('timeout' => 15));
