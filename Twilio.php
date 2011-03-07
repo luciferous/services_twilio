@@ -139,7 +139,6 @@ class TwilioClient extends Resource {
     if (200 <= $status && $status < 300) {
       if ($headers['Content-Type'] == 'application/json') {
         $object = json_decode($body);
-        //var_export($object);
         return $object;
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
@@ -158,12 +157,9 @@ class TwilioClient extends Resource {
     if (200 <= $status && $status < 300) {
       if ($headers['Content-Type'] == 'application/json') {
         $object = json_decode($body);
-        //var_export($object);
         return $object;
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
-  }
-  private function _request($method, $path, array $params = array()) {
   }
 }
 
@@ -171,7 +167,7 @@ class Calls extends ListResource {
   public function __construct(DataProxy $proxy) {
     parent::__construct('Calls', $proxy);
   }
-  public function createCall($from, $to, $url, array $params = array()) {
+  public function create($from, $to, $url, array $params = array()) {
     return parent::create(array(
       'From' => $from,
       'To' => $to,
