@@ -197,5 +197,51 @@ class TwilioTest extends PHPUnit_Framework_TestCase {
     ));
   }
 
+  function testUpdate() {
+    $acct = new stdClass;
+    $acct->subresource_uris->calls = '/2010-04-01/Accounts/AC123/Calls.json';
+    $http = m::mock();
+    $http->shouldReceive('get')->once()
+      ->with('/2010-04-01/Accounts/AC123.json')
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        json_encode($acct)
+      ));
+    $http->shouldReceive('post')->once()
+      ->with('/2010-04-01/Accounts/AC123/Calls.json', m::any(), m::any())
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        '{"sid":"CA123"}'
+      ));
+    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $client->account->calls->create('123', '123', 'http://example.com');
+  }
+
+  function testModifyLiveCall() {
+    $acct = new stdClass;
+    $acct->subresource_uris->calls = '/2010-04-01/Accounts/AC123/Calls.json';
+    $http = m::mock();
+    $http->shouldReceive('get')->once()
+      ->with('/2010-04-01/Accounts/AC123.json')
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        json_encode($acct)
+      ));
+    $http->shouldReceive('post')->once()
+      ->with('/2010-04-01/Accounts/AC123/Calls.json', m::any(), m::any())
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        '{"sid":"CA123"}'
+      ));
+    $http->shouldReceive('post')->once()
+      ->with(
+        '/2010-04-01/Accounts/AC123/Calls/CA123.json',
+        m::any(),
+        'Status=completed'
+      )
+      ->andReturn(array(200, array('Content-Type' => 'application/json'),
+        '{"sid":"CA123"}'
+      ));
+    $client = new TwilioClient('AC123', '123', '2010-04-01', $http);
+    $call = $client->account->calls->create('123', '123', 'http://example.com');
+    $call->hangup();
+  }
+
   //function testAccessingNonExistentPropertiesErrorsOut
 }

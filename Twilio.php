@@ -3,8 +3,8 @@
 require_once dirname(__FILE__) . '/' . 'tiny_http.php';
 
 interface DataProxy {
-  function send($key, $value);
   function receive($key, array $params = array());
+  function send($key, array $params = array());
 }
 
 abstract class Resource implements DataProxy {
@@ -17,8 +17,8 @@ abstract class Resource implements DataProxy {
   public function receive($sid, array $params = array()) {
     return $this->proxy->receive("$this->name/$sid", $params);
   }
-  public function send($key, $value) {
-    throw new ErrorException('not implemented');
+  public function send($sid, array $params = array()) {
+    return $this->proxy->send("$this->name/$sid", $params);
   }
   public static function decamelize($word) {
     return preg_replace(
@@ -34,7 +34,17 @@ abstract class Resource implements DataProxy {
 
 class ListResource extends Resource {
   public function get($sid) {
-    return new InstanceResource($sid, $this->getInstanceName(), $this);
+    $type = $this->getInstanceName();
+    return class_exists($type)
+      ? new $type($sid, $this)
+      : new InstanceResource($sid, $this->getInstanceName(), $this);
+  }
+
+  public function create(array $params) {
+    $obj = $this->proxy->send($this->name, $params);
+    $inst = $this->get($obj->sid);
+    $inst->setObject($obj);
+    return $inst;
   }
 
   public function getList(array $params = array()) {
@@ -66,12 +76,18 @@ class InstanceResource extends Resource {
     $this->object->sid = $sid;
     parent::__construct($name, $proxy);
   }
+  public function update($params, $value = NULL) {
+    if (!is_array($params)) {
+      $params = array($params => $value);
+    }
+    $this->proxy->send("$this->sid", $params);
+  }
   public function setObject($object) {
-    $this->object = $object;
+    $this->load($object);
   }
   public function __get($key) {
     if (!isset($this->object->$key)) {
-      $this->load($key);
+      $this->load();
     }
     return isset($this->$key)
       ? $this->$key
@@ -84,8 +100,11 @@ class InstanceResource extends Resource {
   public function receive($path, array $params = array()) {
     return $this->proxy->receive("$this->sid/$path", $params);
   }
-  private function load($key) {
-    $this->object = $this->proxy->receive($this->sid);
+  public function send($path, array $params = array()) {
+    return $this->proxy->send("$this->sid/$path", $params);
+  }
+  private function load($object = NULL) {
+    $this->object = $object ? $object : $this->proxy->receive($this->sid);
     if (empty($this->object->subresource_uris)) return;
     foreach ($this->object->subresource_uris as $res => $uri) {
       $type = self::camelize($res);
@@ -124,6 +143,49 @@ class TwilioClient extends Resource {
         return $object;
       } else throw new ErrorException('not json');
     } else throw new ErrorException("$status: $body");
+  }
+  public function send($path, array $params = array()) {
+    $path = "$path.json";
+    list($status, $headers, $body) = empty($params)
+      ? $this->http->post(
+        "/$this->version/$path",
+        array('Content-Type' => 'application/x-www-form-urlencoded')
+      ) : $this->http->post(
+        "/$this->version/$path",
+        array('Content-Type' => 'application/x-www-form-urlencoded'),
+        http_build_query($params, '', '&')
+      );
+    if (200 <= $status && $status < 300) {
+      if ($headers['Content-Type'] == 'application/json') {
+        $object = json_decode($body);
+        //var_export($object);
+        return $object;
+      } else throw new ErrorException('not json');
+    } else throw new ErrorException("$status: $body");
+  }
+  private function _request($method, $path, array $params = array()) {
+  }
+}
+
+class Calls extends ListResource {
+  public function __construct(DataProxy $proxy) {
+    parent::__construct('Calls', $proxy);
+  }
+  public function create($from, $to, $url, array $params = array()) {
+    return parent::create(array(
+      'From' => $from,
+      'To' => $to,
+      'Url' => $url,
+    ) + $params);
+  }
+}
+
+class Call extends InstanceResource {
+  public function __construct($sid, Calls $list) {
+    parent::__construct($sid, 'Call', $list);
+  }
+  public function hangup() {
+    $this->update('Status', 'completed');
   }
 }
 
