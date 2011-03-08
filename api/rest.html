@@ -1,0 +1,944 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>REST Documentation &mdash; Services_Twilio v0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pylons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Services_Twilio v0.0.0 documentation" href="../index.html" />
+    <link rel="next" title="TwiML Documentation" href="twiml.html" />
+    <link rel="prev" title="TwiML Creation" href="../usage/twiml.html" />
+<link rel="stylesheet" href="http://static.pylonsproject.org/fonts/nobile/stylesheet.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://static.pylonsproject.org/fonts/neuton/stylesheet.css" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<link rel="shortcut icon" href="../_static/pyramid.ico"/>
+
+  </head>
+  <body>
+<div class="header-small">
+	
+	<div class="logo-small">
+		<a href="../index.html">
+      		<img class="logo" src="../_static/pyramid-small.png" alt="Logo"/>
+		</a>
+  	</div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="twiml.html" title="TwiML Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../usage/twiml.html" title="TwiML Creation"
+             accesskey="P">previous</a> |</li>
+    	<li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rest-documentation">
+<span id="api-rest"></span><h1>REST Documentation<a class="headerlink" href="#rest-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="account">
+<h2>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt id="sid">
+<tt class="descname">sid</tt><a class="headerlink" href="#sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 34 character string that uniquely identifies this account.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="date_created">
+<tt class="descname">date_created</tt><a class="headerlink" href="#date_created" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date that this account was created, in GMT in RFC 2822 format</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="date_updated">
+<tt class="descname">date_updated</tt><a class="headerlink" href="#date_updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date that this account was last updated, in GMT in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="friendly_name">
+<tt class="descname">friendly_name</tt><a class="headerlink" href="#friendly_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A human readable description of this account, up to 64 characters long. By default the FriendlyName is your email address.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="status">
+<tt class="descname">status</tt><a class="headerlink" href="#status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The status of this account. Usually active, but can be suspended if you&#8217;ve been bad, or closed if you&#8217;ve been horrible.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="auth_token">
+<tt class="descname">auth_token</tt><a class="headerlink" href="#auth_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The authorization token for this account. This token should be kept a secret, so no sharing.</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="call">
+<h2>Call<a class="headerlink" href="#call" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="parent_call_sid">
+<tt class="descname">parent_call_sid</tt><a class="headerlink" href="#parent_call_sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 34 character string that uniquely identifies the call that created this leg.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given as GMT in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given as GMT in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="account_sid">
+<tt class="descname">account_sid</tt><a class="headerlink" href="#account_sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id of the Account responsible for creating this call.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="to">
+<tt class="descname">to</tt><a class="headerlink" href="#to" title="Permalink to this definition">¶</a></dt>
+<dd><p>The phone number that received this call. e.g., +16175551212 (E.164 format)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="from_">
+<tt class="descname">from_</tt><a class="headerlink" href="#from_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The phone number that made this call. e.g., +16175551212 (E.164 format)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="phone_number_sid">
+<tt class="descname">phone_number_sid</tt><a class="headerlink" href="#phone_number_sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the call was inbound, this is the Sid of the IncomingPhoneNumber that received the call. If the call was outbound, it is the Sid of the OutgoingCallerId from which the call was placed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">status</tt></dt>
+<dd><p>A string representing the status of the call. May be <tt class="xref py py-data docutils literal"><span class="pre">QUEUED</span></tt>, <tt class="xref py py-data docutils literal"><span class="pre">RINGING</span></tt>, <tt class="xref py py-data docutils literal"><span class="pre">IN-PROGRESS</span></tt>, <tt class="xref py py-data docutils literal"><span class="pre">COMPLETED</span></tt>, <tt class="xref py py-data docutils literal"><span class="pre">FAILED</span></tt>, <tt class="xref py py-data docutils literal"><span class="pre">BUSY</span></tt> or <tt class="xref py py-data docutils literal"><span class="pre">NO_ANSWER</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="start_time">
+<tt class="descname">start_time</tt><a class="headerlink" href="#start_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The start time of the call, given as GMT in RFC 2822 format. Empty if the call has not yet been dialed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="end_time">
+<tt class="descname">end_time</tt><a class="headerlink" href="#end_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The end time of the call, given as GMT in RFC 2822 format. Empty if the call did not complete successfully.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="duration">
+<tt class="descname">duration</tt><a class="headerlink" href="#duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>The length of the call in seconds. This value is empty for busy, failed, unanswered or ongoing calls.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="price">
+<tt class="descname">price</tt><a class="headerlink" href="#price" title="Permalink to this definition">¶</a></dt>
+<dd><p>The charge for this call in USD. Populated after the call is completed. May not be immediately available.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="direction">
+<tt class="descname">direction</tt><a class="headerlink" href="#direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string describing the direction of the call. inbound for inbound calls, outbound-api for calls initiated via the REST API or outbound-dial for calls initiated by a &lt;Dial&gt; verb.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="answered_by">
+<tt class="descname">answered_by</tt><a class="headerlink" href="#answered_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this call was initiated with answering machine detection, either human or machine. Empty otherwise.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="forwarded_from">
+<tt class="descname">forwarded_from</tt><a class="headerlink" href="#forwarded_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this call was an incoming call forwarded from another number, the forwarding phone number (depends on carrier supporting forwarding). Empty otherwise.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caller_name">
+<tt class="descname">caller_name</tt><a class="headerlink" href="#caller_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this call was an incoming call from a phone number with Caller ID Lookup enabled, the caller&#8217;s name. Empty otherwise.</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="callerid">
+<h2>CallerId<a class="headerlink" href="#callerid" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">friendly_name</tt></dt>
+<dd><p>A human readable descriptive text for this resource, up to 64 characters long. By default, the FriendlyName is a nicely formatted version of the phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account responsible for this Caller Id.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="phone_number">
+<tt class="descname">phone_number</tt><a class="headerlink" href="#phone_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>The incoming phone number. Formatted with a &#8216;+&#8217; and country code e.g., +16175551212 (E.164 format).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="uri">
+<tt class="descname">uri</tt><a class="headerlink" href="#uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a>.</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="conference">
+<h2>Conference<a class="headerlink" href="#conference" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this conference.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">friendly_name</tt></dt>
+<dd><p>A user provided string that identifies this conference room.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">status</tt></dt>
+<dd><p>A string representing the status of the conference. May be init, in-progress, or completed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this conference was created, given as GMT in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this conference was last updated, given as GMT in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account responsible for creating this conference.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="participants">
+<tt class="descname">participants</tt><a class="headerlink" href="#participants" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <tt class="xref py py-class docutils literal"><span class="pre">Participants</span></tt> resource, listing people currenlty in this conference</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="notification">
+<h2>Notification<a class="headerlink" href="#notification" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account responsible for this notification.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="call_sid">
+<tt class="descname">call_sid</tt><a class="headerlink" href="#call_sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>CallSid is the unique id of the call during which the notification was generated. Empty if the notification was generated by the REST API without regard to a specific phone call.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api_version">
+<tt class="descname">api_version</tt><a class="headerlink" href="#api_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the Twilio in use when this notification was generated.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="log">
+<tt class="descname">log</tt><a class="headerlink" href="#log" title="Permalink to this definition">¶</a></dt>
+<dd><p>An integer log level corresponding to the type of notification: 0 is ERROR, 1 is WARNING.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="error_code">
+<tt class="descname">error_code</tt><a class="headerlink" href="#error_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unique error code for the error condition. You can lookup errors, with possible causes and solutions, in our Error Dictionary.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="more_info">
+<tt class="descname">more_info</tt><a class="headerlink" href="#more_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A URL for more information about the error condition. The URL is a page in our Error Dictionary.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="message_text">
+<tt class="descname">message_text</tt><a class="headerlink" href="#message_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text of the notification.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="message_date">
+<tt class="descname">message_date</tt><a class="headerlink" href="#message_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date the notification was actually generated, given in RFC 2822 format. Due to buffering, this may be slightly different than the DateCreated date.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="request_url">
+<tt class="descname">request_url</tt><a class="headerlink" href="#request_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL of the resource that generated the notification. If the notification was generated during a phone call: This is the URL of the resource on YOUR SERVER that caused the notification. If the notification was generated by your use of the REST API: This is the URL of the REST resource you were attempting to request on Twilio&#8217;s servers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="request_method">
+<tt class="descname">request_method</tt><a class="headerlink" href="#request_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP method in use for the request that generated the notification. If the notification was generated during a phone call: The HTTP Method use to request the resource on your server. If the notification was generated by your use of the REST API: This is the HTTP method used in your request to the REST resource on Twilio&#8217;s servers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="request_variables">
+<tt class="descname">request_variables</tt><a class="headerlink" href="#request_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Twilio-generated HTTP GET or POST variables sent to your server. Alternatively, if the notification was generated by the REST API, this field will include any HTTP POST or PUT variables you sent to the REST API.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="response_headers">
+<tt class="descname">response_headers</tt><a class="headerlink" href="#response_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP headers returned by your server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="response_body">
+<tt class="descname">response_body</tt><a class="headerlink" href="#response_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP body returned by your server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a></p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="participant">
+<h2>Participant<a class="headerlink" href="#participant" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">call_sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies the call that is connected to this conference</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="conference_sid">
+<tt class="descname">conference_sid</tt><a class="headerlink" href="#conference_sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 34 character string that identifies the conference this participant is in</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account that created this conference</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="muted">
+<tt class="descname">muted</tt><a class="headerlink" href="#muted" title="Permalink to this definition">¶</a></dt>
+<dd><p>true if this participant is currently muted. false otherwise.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="start_conference_on_enter">
+<tt class="descname">start_conference_on_enter</tt><a class="headerlink" href="#start_conference_on_enter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Was the startConferenceOnEnter attribute set on this participant (true or false)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="end_conference_on_exit">
+<tt class="descname">end_conference_on_exit</tt><a class="headerlink" href="#end_conference_on_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Was the endConferenceOnExit attribute set on this participant (true or false)?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a>.</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="phonenumber">
+<h2>PhoneNumber<a class="headerlink" href="#phonenumber" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely idetifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given as GMT RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given as GMT RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">friendly_name</tt></dt>
+<dd><p>A human readable descriptive text for this resource, up to 64 characters long. By default, the FriendlyName is a nicely formatted version of the phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account responsible for this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">phone_number</tt></dt>
+<dd><p>The incoming phone number. e.g., +16175551212 (E.164 format)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">api_version</tt></dt>
+<dd><p>Calls to this phone number will start a new TwiML session with this API version.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="voice_caller_id_lookup">
+<tt class="descname">voice_caller_id_lookup</tt><a class="headerlink" href="#voice_caller_id_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up the caller&#8217;s caller-ID name from the CNAM database (additional charges apply). Either true or false.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="voice_url">
+<tt class="descname">voice_url</tt><a class="headerlink" href="#voice_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL Twilio will request when this phone number receives a call.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="voice_method">
+<tt class="descname">voice_method</tt><a class="headerlink" href="#voice_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP method Twilio will use when requesting the above Url. Either GET or POST.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="voice_fallback_url">
+<tt class="descname">voice_fallback_url</tt><a class="headerlink" href="#voice_fallback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL that Twilio will request if an error occurs retrieving or executing the TwiML requested by Url.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="voice_fallback_method">
+<tt class="descname">voice_fallback_method</tt><a class="headerlink" href="#voice_fallback_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP method Twilio will use when requesting the VoiceFallbackUrl. Either GET or POST.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="status_callback">
+<tt class="descname">status_callback</tt><a class="headerlink" href="#status_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL that Twilio will request to pass status parameters (such as call ended) to your application.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="status_callback_method">
+<tt class="descname">status_callback_method</tt><a class="headerlink" href="#status_callback_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP method Twilio will use to make requests to the StatusCallback URL. Either GET or POST.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sms_url">
+<tt class="descname">sms_url</tt><a class="headerlink" href="#sms_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL Twilio will request when receiving an incoming SMS message to this number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sms_method">
+<tt class="descname">sms_method</tt><a class="headerlink" href="#sms_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP method Twilio will use when making requests to the SmsUrl. Either GET or POST.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sms_fallback_url">
+<tt class="descname">sms_fallback_url</tt><a class="headerlink" href="#sms_fallback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL that Twilio will request if an error occurs retrieving or executing the TwiML from SmsUrl.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sms_fallback_method">
+<tt class="descname">sms_fallback_method</tt><a class="headerlink" href="#sms_fallback_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HTTP method Twilio will use when requesting the above URL. Either GET or POST.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a>.</p>
+</dd></dl>
+
+</div></blockquote>
+<p>AvailablePhoneNumber</p>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">friendly_name</tt></dt>
+<dd><p>A nicely-formatted version of the phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">phone_number</tt></dt>
+<dd><p>The phone number, in E.164 (i.e. &#8220;+1&#8221;) format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lata">
+<tt class="descname">lata</tt><a class="headerlink" href="#lata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The LATA of this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rate_center">
+<tt class="descname">rate_center</tt><a class="headerlink" href="#rate_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>The rate center of this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="latitude">
+<tt class="descname">latitude</tt><a class="headerlink" href="#latitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>The latitude coordinate of this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="longitude">
+<tt class="descname">longitude</tt><a class="headerlink" href="#longitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>The longitude coordinate of this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="region">
+<tt class="descname">region</tt><a class="headerlink" href="#region" title="Permalink to this definition">¶</a></dt>
+<dd><p>The two-letter state or province abbreviation of this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="postal_code">
+<tt class="descname">postal_code</tt><a class="headerlink" href="#postal_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>The postal (zip) code of this phone number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="iso_country">
+<tt class="descname">iso_country</tt><a class="headerlink" href="#iso_country" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="recording">
+<h2>Recording<a class="headerlink" href="#recording" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account responsible for this recording.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">call_sid</tt></dt>
+<dd><p>The call during which the recording was made.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">duration</tt></dt>
+<dd><p>The length of the recording, in seconds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">api_version</tt></dt>
+<dd><p>The version of the API in use during the recording.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="subresource_uris">
+<tt class="descname">subresource_uris</tt><a class="headerlink" href="#subresource_uris" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of subresources under this account</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="formats">
+<tt class="descname">formats</tt><a class="headerlink" href="#formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>A diciontary of the audio formats available for this recording</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;wav&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;https://api.twilio.com/path/to/recording.wav&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mp3&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;https://api.twilio.com/path/to/recording.mp3&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="smsmessage">
+<h2>SmsMessage<a class="headerlink" href="#smsmessage" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="date_sent">
+<tt class="descname">date_sent</tt><a class="headerlink" href="#date_sent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date that the SMS was sent, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account that sent this SMS message.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="from">
+<tt class="descname">from</tt><a class="headerlink" href="#from" title="Permalink to this definition">¶</a></dt>
+<dd><p>The phone number that initiated the message in E.164 format. For incoming messages, this will be the remote phone. For outgoing messages, this will be one of your Twilio phone numbers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">to</tt></dt>
+<dd><p>The phone number that received the message in E.164 format. For incoming messages, this will be one of your Twilio phone numbers. For outgoing messages, this will be the remote phone.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="body">
+<tt class="descname">body</tt><a class="headerlink" href="#body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text body of the SMS message. Up to 160 characters long.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">status</tt></dt>
+<dd><p>The status of this SMS message. Either queued, sending, sent, or failed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">direction</tt></dt>
+<dd><p>The direction of this SMS message. incoming for incoming messages, outbound-api for messages initiated via the REST API, outbound-call for messages initiated during a call or outbound-reply for messages initiated in response to an incoming SMS.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">price</tt></dt>
+<dd><p>The amount billed for the message.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">api_version</tt></dt>
+<dd><p>The version of the Twilio API used to process the SMS message.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a></p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="transcription">
+<h2>Transcription<a class="headerlink" href="#transcription" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt>
+<tt class="descname">sid</tt></dt>
+<dd><p>A 34 character string that uniquely identifies this resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_created</tt></dt>
+<dd><p>The date that this resource was created, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">date_updated</tt></dt>
+<dd><p>The date that this resource was last updated, given in RFC 2822 format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">account_sid</tt></dt>
+<dd><p>The unique id of the Account responsible for this transcription.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">status</tt></dt>
+<dd><p>A string representing the status of the transcription: in-progress, completed or failed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="recording_sid">
+<tt class="descname">recording_sid</tt><a class="headerlink" href="#recording_sid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id of the Recording this Transcription was made of.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">duration</tt></dt>
+<dd><p>The duration of the transcribed audio, in seconds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transcription_text">
+<tt class="descname">transcription_text</tt><a class="headerlink" href="#transcription_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text content of the transcription.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">price</tt></dt>
+<dd><p>The charge for this transcript in USD. Populated after the transcript is completed. Note, this value may not be immediately available.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<tt class="descname">uri</tt></dt>
+<dd><p>The URI for this resource, relative to <a class="reference external" href="https://api.twilio.com">https://api.twilio.com</a></p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">REST Documentation</a><ul>
+<li><a class="reference internal" href="#account">Account</a></li>
+<li><a class="reference internal" href="#call">Call</a></li>
+<li><a class="reference internal" href="#callerid">CallerId</a></li>
+<li><a class="reference internal" href="#conference">Conference</a></li>
+<li><a class="reference internal" href="#notification">Notification</a></li>
+<li><a class="reference internal" href="#participant">Participant</a></li>
+<li><a class="reference internal" href="#phonenumber">PhoneNumber</a></li>
+<li><a class="reference internal" href="#recording">Recording</a></li>
+<li><a class="reference internal" href="#smsmessage">SmsMessage</a></li>
+<li><a class="reference internal" href="#transcription">Transcription</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../usage/twiml.html"
+                        title="previous chapter">TwiML Creation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="twiml.html"
+                        title="next chapter">TwiML Documentation</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="twiml.html" title="TwiML Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../usage/twiml.html" title="TwiML Creation"
+             >previous</a> |</li>
+    	<li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Neuman Vong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,161 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TwiML Creation &mdash; Services_Twilio v0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pylons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Services_Twilio v0.0.0 documentation" href="../index.html" />
+    <link rel="next" title="REST Documentation" href="../api/rest.html" />
+    <link rel="prev" title="REST API Usage" href="rest.html" />
+<link rel="stylesheet" href="http://static.pylonsproject.org/fonts/nobile/stylesheet.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://static.pylonsproject.org/fonts/neuton/stylesheet.css" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<link rel="shortcut icon" href="../_static/pyramid.ico"/>
+
+  </head>
+  <body>
+<div class="header-small">
+	
+	<div class="logo-small">
+		<a href="../index.html">
+      		<img class="logo" src="../_static/pyramid-small.png" alt="Logo"/>
+		</a>
+  	</div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../api/rest.html" title="REST Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rest.html" title="REST API Usage"
+             accesskey="P">previous</a> |</li>
+    	<li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="twiml-creation">
+<span id="usage-twiml"></span><h1>TwiML Creation<a class="headerlink" href="#twiml-creation" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="xref py py-mod docutils literal"><span class="pre">twiml</span></tt> module is responsible for the creation and validation of TwiML. Configuration options also allow users to specift defaults for various verbs.</p>
+<div class="section" id="creation">
+<h2>Creation<a class="headerlink" href="#creation" title="Permalink to this headline">¶</a></h2>
+<p>TwiML creation begins with the <tt class="xref py py-class docutils literal"><span class="pre">Response</span></tt> verb. Each succesive verb is created by calling various methods on the response, such as <tt class="xref py py-meth docutils literal"><span class="pre">say()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">play()</span></tt>. These methods return the verbs they create to ease the creation of nested TwiML. To finish, call the <tt class="xref py py-meth docutils literal"><span class="pre">toxml()</span></tt> method on the <tt class="xref py py-class docutils literal"><span class="pre">Response</span></tt>, which returns raw TwiML.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio_Twiml</span><span class="p">();</span>
+<span class="nv">$response</span><span class="o">-&gt;</span><span class="na">say</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">);</span>
+<span class="k">print</span> <span class="nv">$response</span><span class="p">;</span>
+<span class="c1"># returns &lt;Response&gt;&lt;Say&gt;Hello&lt;/Say&gt;&lt;Response&gt;</span>
+</pre></div>
+</div>
+<p>The verb methods (outlined in the complete reference) take the body (only text) of the verb as the first argument. All attributes are keyword arguements.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio_Twiml</span><span class="p">();</span>
+<span class="nv">$response</span><span class="o">-&gt;</span><span class="na">play</span><span class="p">(</span><span class="s2">&quot;monkey.mp3&quot;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;loop&#39;</span> <span class="o">=&gt;</span> <span class="m">5</span><span class="p">));</span>
+<span class="k">print</span> <span class="nv">$response</span><span class="p">;</span>
+<span class="c1"># returns &lt;Response&gt;&lt;Play loop=&quot;3&quot;&gt;monkey.mp3&lt;/Play&gt;&lt;Response&gt;</span>
+</pre></div>
+</div>
+<p>Python 2.6+ added the <tt class="xref py py-const docutils literal"><span class="pre">with</span></tt> statement for context management. Using <tt class="xref py py-const docutils literal"><span class="pre">with</span></tt>, the module can <em>almost</em> emulate Ruby blocks.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio_Twiml</span><span class="p">();</span>
+<span class="nv">$response</span><span class="o">-&gt;</span><span class="na">say</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span>
+<span class="nv">$response</span>
+  <span class="o">-&gt;</span><span class="na">gather</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;end_on_key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;4&#39;</span><span class="p">))</span>
+  <span class="o">-&gt;</span><span class="na">say</span><span class="p">(</span><span class="s1">&#39;World&#39;</span><span class="p">);</span>
+<span class="k">print</span> <span class="nv">$response</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>which returns</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;Response&gt;</span>
+  <span class="nt">&lt;Say&gt;</span>Hello<span class="nt">&lt;/Say&gt;</span>
+  <span class="nt">&lt;Gather</span> <span class="na">endOnKey=</span><span class="s">&quot;4&quot;</span><span class="nt">&gt;&lt;Say&gt;</span>World<span class="nt">&lt;/Say&gt;&lt;/Gather&gt;</span>
+<span class="nt">&lt;/Response&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TwiML Creation</a><ul>
+<li><a class="reference internal" href="#creation">Creation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rest.html"
+                        title="previous chapter">REST API Usage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../api/rest.html"
+                        title="next chapter">REST Documentation</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../api/rest.html" title="REST Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rest.html" title="REST API Usage"
+             >previous</a> |</li>
+    	<li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Neuman Vong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

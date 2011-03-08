@@ -90,7 +90,7 @@ pygments_style = 'sphinx'
 # -- Options for HTML output ---------------------------------------------------
 sys.path.append(os.path.abspath('_themes'))
 html_theme_path = ['_themes']
-html_theme = 'pylons'
+html_theme = 'pyramid'
 
 from sphinx.highlighting import lexers
 from pygments.lexers.web import PhpLexer

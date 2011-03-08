@@ -1,0 +1,333 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>REST API Usage &mdash; Services_Twilio v0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pylons.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Services_Twilio v0.0.0 documentation" href="../index.html" />
+    <link rel="next" title="TwiML Creation" href="twiml.html" />
+    <link rel="prev" title="Services_Twilio" href="../index.html" />
+<link rel="stylesheet" href="http://static.pylonsproject.org/fonts/nobile/stylesheet.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://static.pylonsproject.org/fonts/neuton/stylesheet.css" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+<link rel="shortcut icon" href="../_static/pyramid.ico"/>
+
+  </head>
+  <body>
+<div class="header-small">
+	
+	<div class="logo-small">
+		<a href="../index.html">
+      		<img class="logo" src="../_static/pyramid-small.png" alt="Logo"/>
+		</a>
+  	</div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="twiml.html" title="TwiML Creation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Services_Twilio"
+             accesskey="P">previous</a> |</li>
+    	<li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rest-api-usage">
+<h1>REST API Usage<a class="headerlink" href="#rest-api-usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="accounts">
+<h2>Accounts<a class="headerlink" href="#accounts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="updating-account-information">
+<h3>Updating Account Information<a class="headerlink" href="#updating-account-information" title="Permalink to this headline">¶</a></h3>
+<p>Updating <tt class="xref py py-class docutils literal"><span class="pre">Account</span></tt> information is really easy:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$account</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="p">;</span>
+<span class="nv">$account</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;My Awesome Account&#39;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-sub-account">
+<h3>Creating a Sub Account<a class="headerlink" href="#creating-a-sub-account" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$subaccount</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">accounts</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+  <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;My Awesome SubAccount&#39;</span>
+<span class="p">));</span>
+</pre></div>
+</div>
+<p>Can I make calls with this sub account? I have no idea</p>
+</div>
+</div>
+<div class="section" id="phone-calls">
+<h2>Phone Calls<a class="headerlink" href="#phone-calls" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="making-a-phone-call">
+<h3>Making a Phone Call<a class="headerlink" href="#making-a-phone-call" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Calls</span></tt> resource allows you to make outgoing calls:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$call</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">calls</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span>
+  <span class="s1">&#39;9991231234&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;9991231234&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;http://foo.com/call.xml&#39;</span>
+<span class="p">);</span>
+<span class="k">print</span> <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">length</span><span class="p">;</span>
+<span class="k">print</span> <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">sid</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accessing-resources-from-a-specific-call">
+<h3>Accessing Resources from a specific Call<a class="headerlink" href="#accessing-resources-from-a-specific-call" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Call</span></tt> resource has some sub resources you can access, such as
+notifications and recordings. If you have already have a <tt class="xref py py-class docutils literal"><span class="pre">Call</span></tt>
+resource, they are easy to get.:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">calls</span> <span class="k">as</span> <span class="nv">$call</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">notifications</span><span class="p">;</span>
+  <span class="k">print</span> <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">transcriptions</span><span class="p">;</span>
+  <span class="k">print</span> <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">recordings</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Be careful, as the above code makes quite a few HTTP requests.</p>
+</div>
+<div class="section" id="retrieve-a-call-record">
+<h3>Retrieve a Call Record<a class="headerlink" href="#retrieve-a-call-record" title="Permalink to this headline">¶</a></h3>
+<p>If you already have a <tt class="xref py py-class docutils literal"><span class="pre">Call</span></tt> sid, you can use the client to retrieve
+that record.:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$sid</span> <span class="o">=</span> <span class="s2">&quot;CA12341234&quot;</span>
+<span class="nv">$call</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">calls</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="nv">$sid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="modifying-live-calls">
+<h3>Modifying live calls<a class="headerlink" href="#modifying-live-calls" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Call</span></tt> resource makes it easy to find current live calls and
+redirect them as necessary:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$calls</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">calls</span><span class="o">-&gt;</span><span class="na">getList</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;in-progress&#39;</span><span class="p">));</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$calls</span> <span class="k">as</span> <span class="nv">$call</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">route</span><span class="p">(</span><span class="s1">&#39;http://foo.com/new.xml&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;method&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;POST&#39;</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Ending all live calls is also possible:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$calls</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">calls</span><span class="o">-&gt;</span><span class="na">getList</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;in-progress&#39;</span><span class="p">));</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$calls</span> <span class="k">as</span> <span class="nv">$call</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">hangup</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that <tt class="xref py py-meth docutils literal"><span class="pre">hangup()</span></tt> will also cancel calls currently queued.</p>
+</div>
+</div>
+<div class="section" id="caller-ids">
+<h2>Caller Ids<a class="headerlink" href="#caller-ids" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="validate-a-phone-number">
+<h3>Validate a Phone Number<a class="headerlink" href="#validate-a-phone-number" title="Permalink to this headline">¶</a></h3>
+<p>Adding a new phone number to your validated numbers is quick and easy:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$response</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">caller_ids</span><span class="o">-&gt;</span><span class="na">validate</span><span class="p">(</span><span class="s1">&#39;+9876543212&#39;</span><span class="p">);</span>
+<span class="k">print</span> <span class="nx">response</span><span class="o">-&gt;</span><span class="na">validation_code</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Twilio will call the provided number and for the validation code to be entered.</p>
+</div>
+<div class="section" id="listing-all-validated-phone-numbers">
+<h3>Listing all Validated Phone Numbers<a class="headerlink" href="#listing-all-validated-phone-numbers" title="Permalink to this headline">¶</a></h3>
+<p>Show all the current caller_ids:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">caller_ids</span> <span class="k">as</span> <span class="nv">$caller_id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="nv">$caller_id</span><span class="o">-&gt;</span><span class="na">friendly_name</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conferences">
+<h2>Conferences<a class="headerlink" href="#conferences" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="filter-conferences-by-status">
+<h3>Filter Conferences by Status<a class="headerlink" href="#filter-conferences-by-status" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">conferences</span><span class="o">-&gt;</span><span class="na">getList</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+  <span class="s1">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;in-progress&#39;</span>
+<span class="p">))</span> <span class="k">as</span> <span class="nv">$conf</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="nv">$conf</span><span class="o">-&gt;</span><span class="na">sid</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mute-all-participants">
+<h3>Mute all participants<a class="headerlink" href="#mute-all-participants" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$sid</span> <span class="o">=</span> <span class="s2">&quot;CO119231312&quot;</span>
+<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">conferences</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="nv">$sid</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">participants</span> <span class="k">as</span> <span class="nv">$p</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$p</span><span class="o">-&gt;</span><span class="na">mute</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="notifications">
+<h2>Notifications<a class="headerlink" href="#notifications" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="filter-notifications-by-log-level">
+<h3>Filter Notifications by Log Level<a class="headerlink" href="#filter-notifications-by-log-level" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">notifications</span><span class="o">-&gt;</span><span class="na">getList</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+  <span class="s1">&#39;log_level&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;0&#39;</span>
+<span class="p">)</span> <span class="k">as</span> <span class="nv">$n</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="nv">$n</span><span class="o">-&gt;</span><span class="na">error_code</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="sms-mesages">
+<h2>SMS Mesages<a class="headerlink" href="#sms-mesages" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sending-a-sms-message">
+<h3>Sending a SMS Message<a class="headerlink" href="#sending-a-sms-message" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">SmsMessages</span></tt> resource allows you to send outgoing text messages</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="nv">$t</span> <span class="o">=</span> <span class="s1">&#39;9991231234&#39;</span><span class="p">;</span>
+<span class="nv">$f</span> <span class="o">=</span><span class="s1">&#39;9991231234&#39;</span><span class="p">;</span>
+<span class="nv">$text</span> <span class="o">=</span> <span class="s2">&quot;Hello monkey!&quot;</span>
+<span class="nv">$message</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">sms_messages</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="nv">$t</span><span class="p">,</span> <span class="nv">$f</span><span class="p">,</span> <span class="nv">$text</span><span class="p">);</span>
+<span class="k">print</span> <span class="nv">$message</span><span class="o">-&gt;</span><span class="na">sid</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="transcriptions">
+<h2>Transcriptions<a class="headerlink" href="#transcriptions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="show-all-transcribed-messagse">
+<h3>Show all Transcribed Messagse<a class="headerlink" href="#show-all-transcribed-messagse" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Services_Twilio</span><span class="p">(</span><span class="s1">&#39;AC123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">);</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">account</span><span class="o">-&gt;</span><span class="na">transcriptions</span> <span class="k">as</span> <span class="nv">$t</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="nv">$t</span><span class="o">.</span><span class="nx">transcription_text</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">REST API Usage</a><ul>
+<li><a class="reference internal" href="#accounts">Accounts</a><ul>
+<li><a class="reference internal" href="#updating-account-information">Updating Account Information</a></li>
+<li><a class="reference internal" href="#creating-a-sub-account">Creating a Sub Account</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#phone-calls">Phone Calls</a><ul>
+<li><a class="reference internal" href="#making-a-phone-call">Making a Phone Call</a></li>
+<li><a class="reference internal" href="#accessing-resources-from-a-specific-call">Accessing Resources from a specific Call</a></li>
+<li><a class="reference internal" href="#retrieve-a-call-record">Retrieve a Call Record</a></li>
+<li><a class="reference internal" href="#modifying-live-calls">Modifying live calls</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#caller-ids">Caller Ids</a><ul>
+<li><a class="reference internal" href="#validate-a-phone-number">Validate a Phone Number</a></li>
+<li><a class="reference internal" href="#listing-all-validated-phone-numbers">Listing all Validated Phone Numbers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conferences">Conferences</a><ul>
+<li><a class="reference internal" href="#filter-conferences-by-status">Filter Conferences by Status</a></li>
+<li><a class="reference internal" href="#mute-all-participants">Mute all participants</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notifications">Notifications</a><ul>
+<li><a class="reference internal" href="#filter-notifications-by-log-level">Filter Notifications by Log Level</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sms-mesages">SMS Mesages</a><ul>
+<li><a class="reference internal" href="#sending-a-sms-message">Sending a SMS Message</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transcriptions">Transcriptions</a><ul>
+<li><a class="reference internal" href="#show-all-transcribed-messagse">Show all Transcribed Messagse</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Services_Twilio</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="twiml.html"
+                        title="next chapter">TwiML Creation</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="twiml.html" title="TwiML Creation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Services_Twilio"
+             >previous</a> |</li>
+    	<li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Neuman Vong.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
