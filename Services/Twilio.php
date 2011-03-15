@@ -102,11 +102,9 @@ class Services_Twilio extends Services_Twilio_Resource
             if ($headers['content-type'] == 'application/json') {
                 $object = json_decode($body);
                 return $object;
-            } else {
-                throw new ErrorException('not json');
             }
-        } else {
-            throw new ErrorException("$status: $body");
+            throw new ErrorException('not json');
         }
+        throw new ErrorException("$status: $body");
     }
 }
